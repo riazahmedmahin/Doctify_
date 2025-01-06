@@ -7,14 +7,14 @@ class DoctorListScreen extends StatefulWidget {
 }
 
 class _DoctorListScreenState extends State<DoctorListScreen> {
-  String selectedCategory = 'Neuro'; // Set initial category to Cardio
+  String selectedCategory = 'Neurologist'; // Set initial category to Cardio
   List<Map<String, dynamic>> doctors = [];
 
   // List of available categories
   final List<String> categories = [
-    'Neuro',
+    'Neurologist',
+    'Cardiologist',
     'Dentist',
-    'Cardio',
     'Hepatology',
     'Family Physician',
     'Internist',

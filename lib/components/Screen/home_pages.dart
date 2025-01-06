@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'authscreen/hello.dart';
 
-
 class HomePages extends StatefulWidget {
   const HomePages({super.key});
 
@@ -20,7 +19,7 @@ class _HomePagesState extends State<HomePages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 224, 235, 251),
+      backgroundColor: Color.fromARGB(255, 224, 235, 251),
       appBar: Appbar,
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -32,9 +31,9 @@ class _HomePagesState extends State<HomePages> {
                 "Find your medicine\nspecialist",
                 style: TextStyle(fontWeight: FontWeight.w500, fontSize: 29),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               TextFieldWithSortIcon(),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -43,7 +42,6 @@ class _HomePagesState extends State<HomePages> {
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                   ),
                   Text(
-
                     "see all",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -64,13 +62,14 @@ class _HomePagesState extends State<HomePages> {
                   Text(
                     "see all",
                     style: TextStyle(
-                      fontWeight: FontWeight.w600,fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
                       color: Color.fromARGB(255, 22, 108, 207),
                     ),
                   )
                 ],
               ),
-              SizedBox(height: 5,),
+              SizedBox(height: 5),
               Upcommingcard(),
               SizedBox(height: 15),
               Row(
@@ -83,14 +82,15 @@ class _HomePagesState extends State<HomePages> {
                   Text(
                     "see all",
                     style: TextStyle(
-                      fontWeight: FontWeight.w600,fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
                       color: Color.fromARGB(255, 22, 108, 207),
                     ),
                   )
                 ],
               ),
               SizedBox(height: 10),
-              TopDoctorsList(), // Display doctors in a grid
+              TopDoctorsList(),
             ],
           ),
         ),
@@ -100,7 +100,7 @@ class _HomePagesState extends State<HomePages> {
 
   AppBar get Appbar {
     return AppBar(
-        backgroundColor: Color.fromARGB(255, 224, 235, 251),
+      backgroundColor: Color.fromARGB(255, 224, 235, 251),
       leading: Padding(
         padding: const EdgeInsets.only(left: 8.0, top: 8, bottom: 5, right: 8),
         child: Container(
@@ -137,8 +137,6 @@ class _HomePagesState extends State<HomePages> {
       ],
     );
   }
-
-  //get category => null;
 }
 
 class CategoryItemList extends StatelessWidget {
@@ -183,25 +181,28 @@ class TopDoctorsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: doctorsCollection.snapshots(), // Real-time updates
+      stream: doctorsCollection.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
 
         if (snapshot.hasError) {
-          return Text("Error: ${snapshot.error}");
+          return Center(child: Text("Error: ${snapshot.error}"));
         }
 
-        // Get doctor data
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(child: Text("No doctors available"));
+        }
+
         final List<QueryDocumentSnapshot> doctors = snapshot.data!.docs;
 
         return GridView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: 4,
+          itemCount: doctors.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Two cards per row
+            crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             childAspectRatio: 1.5,
@@ -221,4 +222,3 @@ class TopDoctorsList extends StatelessWidget {
     );
   }
 }
-

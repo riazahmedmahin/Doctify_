@@ -100,6 +100,7 @@ class _HomePagesState extends State<HomePages> {
 
   AppBar get Appbar {
     return AppBar(
+      elevation: 0,
       backgroundColor: Color.fromARGB(255, 224, 235, 251),
       leading: Padding(
         padding: const EdgeInsets.only(left: 8.0, top: 8, bottom: 5, right: 8),

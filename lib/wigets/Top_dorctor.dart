@@ -1,6 +1,7 @@
-import 'package:app/components/Screen/details_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:app/components/Screen/details_screen.dart';
 
 class TopDoctorCard extends StatelessWidget {
   final String name;
@@ -21,14 +22,31 @@ class TopDoctorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Get.to(() => DoctorDetailsPage(
-          name: name,
-          specialty: specialty,
-          hospital: hospital,
-          rating: rating,
-          image: image,
-        ));
+      onTap: () async {
+        try {
+          // Fetch additional data from Firebase
+          final docSnapshot = await FirebaseFirestore.instance
+              .collection('doctors')
+              .where('name', isEqualTo: name)
+              .get();
+
+          if (docSnapshot.docs.isNotEmpty) {
+            final doctorData = docSnapshot.docs.first.data();
+            Get.to(() => DoctorDetailsPage(
+                  name: name,
+                  specialty: specialty,
+                  hospital: hospital,
+                  rating: rating,
+                  image: image,
+                  description: doctorData['description'] ?? 'No description available',
+                  qualification: doctorData['qualification'] ?? 'No qualification listed',
+                ));
+          } else {
+            Get.snackbar('Error', 'Doctor details not found.');
+          }
+        } catch (e) {
+          Get.snackbar('Error', 'Failed to fetch doctor details: $e');
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(8),
@@ -64,7 +82,7 @@ class TopDoctorCard extends StatelessWidget {
                             name,
                             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                             maxLines: 1,
-                            overflow: TextOverflow.ellipsis, // Add ellipsis if the name is too long
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Row(
                             children: [

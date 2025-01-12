@@ -1,5 +1,5 @@
 import 'package:app/components/Screen/Doctor_profile.dart';
-import 'package:app/components/Screen/Doctor_list_screen.dart';
+import 'package:app/components/Screen/Doctors/Doctor_list_screen.dart';
 import 'package:app/components/Screen/home_pages.dart';
 import 'package:app/components/Screen/setting.dart';
 import 'package:flutter/material.dart';
@@ -82,11 +82,11 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
                       label: '',
                     ),
                     BottomNavigationBarItem(
-                      icon: _buildIconWithBackground(Icons.person, 2),
+                      icon: _buildIconWithBackground(Icons.person_sharp, 2),
                       label: '',
                     ),
                     BottomNavigationBarItem(
-                      icon: _buildIconWithBackground(Icons.account_box_outlined, 3),
+                      icon: _buildIconWithBackground(Icons.chat_bubble_outline, 3),
                       label: '',
                     ),
                     BottomNavigationBarItem(

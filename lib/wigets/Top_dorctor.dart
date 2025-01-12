@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:app/components/Screen/details_screen.dart';
+import 'package:app/components/Screen/Doctors/details_screen.dart';
 
 class TopDoctorCard extends StatelessWidget {
   final String name;
@@ -40,6 +40,9 @@ class TopDoctorCard extends StatelessWidget {
                   image: image,
                   description: doctorData['description'] ?? 'No description available',
                   qualification: doctorData['qualification'] ?? 'No qualification listed',
+                  experience: doctorData["experience"],
+                  patient:doctorData['patient'],
+                  fees: doctorData['fees'],
                 ));
           } else {
             Get.snackbar('Error', 'Doctor details not found.');

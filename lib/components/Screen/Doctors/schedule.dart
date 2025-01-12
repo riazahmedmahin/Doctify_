@@ -77,6 +77,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                       _selectedDate = day;
                     });
                   },
+
                   child: Container(
                     width: 72,
                     margin: EdgeInsets.symmetric(horizontal: 8),

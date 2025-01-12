@@ -1,4 +1,5 @@
 import 'package:app/CRUD/CURD.dart';
+import 'package:app/components/Screen/Doctors/schedule.dart';
 import 'package:app/wigets/Top_dorctor.dart';
 import 'package:app/wigets/UpcommingCard.dart';
 import 'package:app/wigets/category_itel.dart';
@@ -122,7 +123,7 @@ class _HomePagesState extends State<HomePages> {
             radius: 20,
             child: GestureDetector(
               onTap: (){
-                //Get.to((ChatScreen));
+                //Get.to(() => DoctorScheduleScreen());
               },
               child: ClipOval(
                 child: Image.network(

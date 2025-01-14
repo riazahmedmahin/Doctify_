@@ -123,7 +123,7 @@ class _HomePagesState extends State<HomePages> {
             radius: 20,
             child: GestureDetector(
               onTap: (){
-                //Get.to(() => DoctorScheduleScreen());
+                //Get.to(() => payment());
               },
               child: ClipOval(
                 child: Image.network(

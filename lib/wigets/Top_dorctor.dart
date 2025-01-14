@@ -24,7 +24,7 @@ class TopDoctorCard extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         try {
-          // Fetch additional data from Firebase
+          // Fetch additional data from Firebase including "slot" data
           final docSnapshot = await FirebaseFirestore.instance
               .collection('doctors')
               .where('name', isEqualTo: name)
@@ -32,6 +32,8 @@ class TopDoctorCard extends StatelessWidget {
 
           if (docSnapshot.docs.isNotEmpty) {
             final doctorData = docSnapshot.docs.first.data();
+            String slot = doctorData['slot'] ?? 'No slots available'; // Fix here
+
             Get.to(() => DoctorDetailsPage(
                   name: name,
                   specialty: specialty,
@@ -41,8 +43,9 @@ class TopDoctorCard extends StatelessWidget {
                   description: doctorData['description'] ?? 'No description available',
                   qualification: doctorData['qualification'] ?? 'No qualification listed',
                   experience: doctorData["experience"],
-                  patient:doctorData['patient'],
+                  patient: doctorData['patient'],
                   fees: doctorData['fees'],
+                  slot: slot, // Pass the slot field
                 ));
           } else {
             Get.snackbar('Error', 'Doctor details not found.');
@@ -72,9 +75,13 @@ class TopDoctorCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(image),
-                      radius: 20,
+                    ClipOval(
+                      child: Image.network(
+                        image,
+                        width: 40, // Adjust the size
+                        height: 40, // Adjust the size
+                        fit: BoxFit.fill, // Ensures the image covers the circle area
+                      ),
                     ),
                     SizedBox(width: 10),
                     Expanded(
@@ -140,3 +147,4 @@ class TopDoctorCard extends StatelessWidget {
     );
   }
 }
+

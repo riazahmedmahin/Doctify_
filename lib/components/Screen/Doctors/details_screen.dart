@@ -1,4 +1,6 @@
+import 'package:app/components/Screen/Doctors/s2.dart';
 import 'package:app/components/Screen/Doctors/schedule.dart';
+import 'package:app/components/Screen/Doctors/ss.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +15,7 @@ class DoctorDetailsPage extends StatelessWidget {
   final String experience;
   final String patient;
   final String fees;
+  final String slot;
 
   const DoctorDetailsPage({
     Key? key,
@@ -25,13 +28,14 @@ class DoctorDetailsPage extends StatelessWidget {
     required this.qualification,
     required this.experience,
     required this.patient,
-    required this.fees,
+    required this.fees, required this.slot,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text("Doctor Details",style: TextStyle(fontSize: 20),),centerTitle: true,
         elevation: 0,
         backgroundColor: const Color.fromARGB(255, 224, 235, 251),
       ),
@@ -46,11 +50,16 @@ class DoctorDetailsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Doctor Image
-                CircleAvatar(
-                  backgroundImage: NetworkImage(image),
-                  radius: 35,
-                  backgroundColor: Colors.blueGrey[50],
+                ClipOval(
+                  child: Image.network(
+                    image,
+                    width: 70, // Adjust size as needed
+                    height: 70, // Adjust size as needed
+                    fit: BoxFit.fill,
+                    // Ensures the image fills the circle
+                  ),
                 ),
+
                 const SizedBox(width: 16), // Spacing between image and text
                 // Name, Specialty, and Rating
                 Expanded(
@@ -83,7 +92,7 @@ class DoctorDetailsPage extends StatelessWidget {
                                 horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(5),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.2),
@@ -161,8 +170,7 @@ class DoctorDetailsPage extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 20),
-
+            const SizedBox(height: 50),
             // Book Appointment Button
             Center(
               child: Container(
@@ -179,7 +187,7 @@ class DoctorDetailsPage extends StatelessWidget {
                 ),
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    Get.to(() => DoctorScheduleScreen());
+                    Get.to(() => DoctorScheduleScreen(slot: slot,));
                     print('Book appointment with $name');
                   },
                   icon: Column(
@@ -187,15 +195,15 @@ class DoctorDetailsPage extends StatelessWidget {
                       const Icon(
                         Icons.calendar_today,
                         color: Colors.white,
-                        size: 15,
+                        size: 17,
                       ),
                       SizedBox(
-                        height: 5,
+                        height: 7,
                       ),
                       const Icon(
                         Icons.monetization_on_sharp,
                         color: Colors.white,
-                        size: 15,
+                        size: 16,
                       ),
                     ],
                   ),
@@ -216,14 +224,14 @@ class DoctorDetailsPage extends StatelessWidget {
                           const Text(
                             "Fees: ",
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 17,
                               color: Colors.white,
                             ),
                           ),
                           Text(
                             fees,
                             style: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 17,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
@@ -236,7 +244,7 @@ class DoctorDetailsPage extends StatelessWidget {
                     backgroundColor: Colors
                         .transparent, // Make button background transparent
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 90, vertical: 20),
+                        horizontal: 90, vertical: 12),
                     shadowColor:
                         Colors.transparent, // Remove shadow if not needed
                     shape: RoundedRectangleBorder(
@@ -257,7 +265,7 @@ class DoctorDetailsPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 55, vertical: 15),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(6),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),

@@ -138,10 +138,14 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(imagePath), // Doctor profile image
-            ),
+            ClipOval(
+                      child: Image.network(
+                        imagePath,
+                        width: 50, // Adjust the size
+                        height: 50, // Adjust the size
+                        fit: BoxFit.fill, // Ensures the image covers the circle area
+                      ),
+                    ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(

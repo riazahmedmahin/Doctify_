@@ -1,4 +1,8 @@
+import 'package:app/components/Screen/authscreen/prifile_screen.dart';
+import 'package:app/components/Screen/seetings/notification.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class MoreScreen extends StatelessWidget {
   @override
@@ -31,7 +35,8 @@ class MoreScreen extends StatelessWidget {
                 width: 150,
                 child: ElevatedButton(
                   onPressed: () {
-
+                    Get.to(()=>ProfileScreen());
+                    // Add edit profile action here
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
@@ -45,16 +50,24 @@ class MoreScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Profile header
-
               SizedBox(height: 20),
-              // Options list
               Expanded(
                 child: ListView(
                   children: [
-                    _buildListItem(Icons.settings, 'General Settings'),
+                    GestureDetector(
+                      onTap: () {
+                        // Navigate to General Settings page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SettingsScreen()),
+                        );
+                      },
+                      child: _buildListItem(Icons.settings, 'General Settings'),
+                    ),
                     _buildListItem(Icons.payment, 'Payments History'),
-                    _buildListItem(Icons.question_answer_outlined, 'Frequently Asked Question'),
+                    _buildListItem(Icons.question_answer_outlined,
+                        'Frequently Asked Question'),
                     _buildListItem(Icons.favorite_outline, 'Favourite Doctors'),
                     _buildListItem(Icons.description_outlined, 'Test Reports'),
                     _buildListItem(Icons.article_outlined, 'Terms & Conditions'),
@@ -88,7 +101,6 @@ class MoreScreen extends StatelessWidget {
             title,
             style: TextStyle(
               fontSize: 15,
-              //fontWeight: FontWeight.w500,
               color: Colors.black87,
             ),
           ),
@@ -97,3 +109,5 @@ class MoreScreen extends StatelessWidget {
     );
   }
 }
+
+

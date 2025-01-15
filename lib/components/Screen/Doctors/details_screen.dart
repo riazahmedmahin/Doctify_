@@ -1,6 +1,4 @@
 import 'package:app/components/Screen/Doctors/s2.dart';
-import 'package:app/components/Screen/Doctors/schedule.dart';
-import 'package:app/components/Screen/Doctors/ss.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,14 +26,19 @@ class DoctorDetailsPage extends StatelessWidget {
     required this.qualification,
     required this.experience,
     required this.patient,
-    required this.fees, required this.slot,
+    required this.fees,
+    required this.slot,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Doctor Details",style: TextStyle(fontSize: 20),),centerTitle: true,
+        title: Text(
+          "Doctor Details",
+          style: TextStyle(fontSize: 20),
+        ),
+        centerTitle: true,
         elevation: 0,
         backgroundColor: const Color.fromARGB(255, 224, 235, 251),
       ),
@@ -56,21 +59,17 @@ class DoctorDetailsPage extends StatelessWidget {
                     width: 70, // Adjust size as needed
                     height: 70, // Adjust size as needed
                     fit: BoxFit.fill,
-                    // Ensures the image fills the circle
                   ),
                 ),
-
-                const SizedBox(width: 16), // Spacing between image and text
+                const SizedBox(width: 16),
                 // Name, Specialty, and Rating
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Name and Rating in a Row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Doctor Name
                           Expanded(
                             child: Text(
                               name,
@@ -79,14 +78,11 @@ class DoctorDetailsPage extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
                               ),
-                              maxLines: 2, // Allow up to 2 lines for wrapping
-                              overflow: TextOverflow
-                                  .ellipsis, // Truncate if it exceeds 2 lines
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const SizedBox(
-                              width: 10), // Spacing between name and rating
-                          // Rating Container
+                          const SizedBox(width: 10),
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
@@ -120,27 +116,20 @@ class DoctorDetailsPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                          height: 4), // Spacing below name and rating
-                      // Specialty and Hospital
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "$specialty - $hospital",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.blueGrey[600],
-                            ),
-                          ),
-                          Text(
-                            qualification,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.blueGrey[600],
-                            ),
-                          ),
-                        ],
+                      const SizedBox(height: 4),
+                      Text(
+                        "$specialty - $hospital",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.blueGrey[600],
+                        ),
+                      ),
+                      Text(
+                        qualification,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.blueGrey[600],
+                        ),
                       ),
                     ],
                   ),
@@ -170,91 +159,73 @@ class DoctorDetailsPage extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 50),
-            // Book Appointment Button
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromARGB(255, 104, 179, 241), // Light blue
-                      Color.fromARGB(255, 41, 121, 255)
-                    ], // Two colors for the gradient
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
+          ],
+        ),
+      ),
+
+      // Fixed Button at the Bottom
+      bottomNavigationBar: Positioned(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 104, 179, 241),
+                Color.fromARGB(255, 41, 121, 255),
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+          child: ElevatedButton.icon(
+            onPressed: () {
+              Get.to(() => DoctorScheduleScreen(slot: slot));
+            },
+            icon: const Icon(
+              Icons.calendar_today,
+              color: Colors.white,
+            ),
+            label: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Book Appointment',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  borderRadius: BorderRadius.circular(8), // Rounded corners
                 ),
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Get.to(() => DoctorScheduleScreen(slot: slot,));
-                    print('Book appointment with $name');
-                  },
-                  icon: Column(
-                    children: [
-                      const Icon(
-                        Icons.calendar_today,
+                Row(
+                  children: [
+                    const Text(
+                      "Fees: ",
+                      style: TextStyle(
+                        fontSize: 17,
                         color: Colors.white,
-                        size: 17,
                       ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      const Icon(
-                        Icons.monetization_on_sharp,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                    ],
-                  ),
-                  label: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Book Appointment',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Text(
-                            "Fees: ",
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Text(
-                            fees,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors
-                        .transparent, // Make button background transparent
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 90, vertical: 12),
-                    shadowColor:
-                        Colors.transparent, // Remove shadow if not needed
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ),
+                    Text(
+                      fees,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
+              ],
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -262,7 +233,7 @@ class DoctorDetailsPage extends StatelessWidget {
 
   Widget _infoCard({required String title, required String value}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 55, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 55, vertical: 13),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(6),

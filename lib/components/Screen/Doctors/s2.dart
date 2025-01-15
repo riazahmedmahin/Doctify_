@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DoctorScheduleScreen extends StatefulWidget {
-  final String slot; // This will be used to display the selected slot.
+  final String slot;
 
   const DoctorScheduleScreen({super.key, required this.slot});
 
@@ -12,51 +12,42 @@ class DoctorScheduleScreen extends StatefulWidget {
 
 class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
   DateTime _selectedDate = DateTime.now();
-  late List<DateTime>
-      _datesToShow; // List of dates to show in the horizontal calendar
-  late String selectedSlot; // Store selected slot
+  late List<DateTime> _datesToShow;
+  late String selectedSlot;
 
   @override
   void initState() {
     super.initState();
-    _datesToShow =
-        _getNext7Days(DateTime.now()); // Initialize with current week
-    _startAutoUpdate(); // Start the automatic update every day
-    selectedSlot =
-        widget.slot; // Initialize the selected slot from the widget's property
+    _datesToShow = _getNext7Days(DateTime.now());
+    _startAutoUpdate();
+    selectedSlot = widget.slot;
   }
 
-  // Function to generate the next 7 days starting from a given date
   List<DateTime> _getNext7Days(DateTime startDate) {
     return List.generate(7, (index) => startDate.add(Duration(days: index)));
   }
 
-  // Function to get the full month name
   String _getMonthName(DateTime date) {
     return DateFormat('MMMM').format(date);
   }
 
-  // Function to format the day in "dd" format
   String _formatDate(DateTime date) {
     return DateFormat('dd').format(date);
   }
 
-  // Function to get the weekday name for a given date
   String _getWeekday(DateTime date) {
-    return DateFormat('EEE')
-        .format(date); // Weekday abbreviation (e.g., Mon, Tue)
+    return DateFormat('EEE').format(date);
   }
 
-  // Function to automatically update the date range every day or after every 24 hours
   void _startAutoUpdate() {
     Future.delayed(Duration.zero, () {
       Future.doWhile(() async {
-        await Future.delayed(Duration(hours: 24)); // Update once every 24 hours
+        await Future.delayed(const Duration(hours: 24));
         DateTime currentDate = DateTime.now();
         if (currentDate.day > _datesToShow[0].day) {
           setState(() {
-            _selectedDate = currentDate; // Always select the new day
-            _datesToShow = _getNext7Days(currentDate); // Update the 7-day range
+            _selectedDate = currentDate;
+            _datesToShow = _getNext7Days(currentDate);
           });
         }
         return Future.value(true);
@@ -78,16 +69,14 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Horizontal list of days (boxes)
             Container(
-              height: 95, // Adjust the height for better visibility
+              height: 120,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 7, // Show 7 days
+                itemCount: 7,
                 itemBuilder: (context, index) {
                   DateTime day = _datesToShow[index];
-                  bool isSelected = _selectedDate
-                      .isSameDay(day); // Check if the day is selected
+                  bool isSelected = _selectedDate.isSameDay(day);
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -96,64 +85,61 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     },
                     child: Container(
                       width: 72,
-                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
                         gradient: isSelected
-                            ? LinearGradient(
-                                // Apply gradient if selected
-                                colors: [
-                                  Color.fromARGB(255, 181, 209, 232), // Light blue
-                                  Color.fromARGB(255, 5, 93, 245)
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              )
-                            : LinearGradient(
-                                // Apply a different gradient if not selected
-                                colors: [
-                                  Color.fromARGB(
-                                      255, 200, 230, 255), // Lighter shade
-                                  Color.fromARGB(255, 255, 255, 255)
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
+                            ? const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 5, 93, 245),
+                            Color.fromARGB(255, 66, 165, 245),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
+                            : const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 224, 235, 251),
+                            Color.fromARGB(255, 187, 216, 250),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            blurRadius: 8,
+                            offset: const Offset(2, 2),
+                          ),
+                        ],
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Display the month at the top of the box
-                          Text(
-                            _getMonthName(day),
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                              color: isSelected
-                                  ? Colors.white
-                                  : Colors.grey.shade600,
-                            ),
-                          ),
-                          // Display the day (Mon, Tue, etc.) at the top
                           Text(
                             _getWeekday(day),
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                              color: isSelected
-                                  ? Colors.white
-                                  : Colors.grey.shade600,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected ? Colors.white : Colors.black54,
                             ),
                           ),
-                          // Display the date (12, 13, etc.) at the bottom
+                          const SizedBox(height: 4),
                           Text(
                             _formatDate(day),
                             style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
-                              color: isSelected
-                                  ? Colors.white
-                                  : Colors.grey.shade600,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected ? Colors.white : Colors.black54,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            _getMonthName(day),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected ? Colors.white : Colors.black54,
                             ),
                           ),
                         ],
@@ -172,47 +158,80 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            // Display selected slot
             Container(
               height: 40,
               width: 100,
               decoration: BoxDecoration(
-                  color: Colors.blueAccent,
-                  borderRadius: BorderRadius.circular(6)),
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(6),
+              ),
               child: Center(
                 child: Text(
                   selectedSlot,
                   style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500),
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
-            //////////////
+            const Spacer(),
             SizedBox(
-              height: 400,
-            ),
-            SizedBox(
-              height: 55,
-              width: 500,
+              height: 70,
+              width: double.infinity,
               child: Container(
                 decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(8),
-                    gradient: LinearGradient(
-                      colors: [
-                        Color.fromARGB(255, 66, 165, 245), // Light blue
-                        Color.fromARGB(255, 41, 121, 255) // Dark blue
-                      ],
-                    )),
-                child: Center(
-                  child: Text(
-                    "Book an Appointment",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400),
+                  gradient: const LinearGradient(
+                    colors: [
+                 Color.fromARGB(255, 5, 93, 245),
+                            Color.fromARGB(255, 79, 167, 239),
+                    ],
+                  // begin: Alignment.topLeft,
+                    //end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    //elevation: 0, // Remove shadow to blend with gradient
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    //backgroundColor: Colors.transparent, // Transparent to show gradient
+                  ),
+                  onPressed: () {
+                    // Handle booking logic
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(width: 5),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Book Appointment",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5,),
+                          Text(
+                            "${_formatDate(_selectedDate)} ${_getMonthName(_selectedDate)} (${_getWeekday(_selectedDate)}) - $selectedSlot",
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(width: 6),
+                    ],
                   ),
                 ),
               ),
@@ -226,8 +245,6 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
 
 extension DateComparison on DateTime {
   bool isSameDay(DateTime other) {
-    return this.year == other.year &&
-        this.month == other.month &&
-        this.day == other.day;
+    return year == other.year && month == other.month && day == other.day;
   }
 }

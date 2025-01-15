@@ -45,7 +45,7 @@ class _HomePagesState extends State<HomePages> {
                   Text(
                     "see all",
                     style: TextStyle(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       color: Color.fromARGB(255, 22, 108, 207),
                     ),
                   )
@@ -63,13 +63,14 @@ class _HomePagesState extends State<HomePages> {
                   Text(
                     "see all",
                     style: TextStyle(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       fontSize: 15,
                       color: Color.fromARGB(255, 22, 108, 207),
                     ),
                   )
                 ],
               ),
+
               SizedBox(height: 5),
               Upcommingcard(),
               SizedBox(height: 15),
@@ -83,7 +84,7 @@ class _HomePagesState extends State<HomePages> {
                   Text(
                     "see all",
                     style: TextStyle(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       fontSize: 15,
                       color: Color.fromARGB(255, 22, 108, 207),
                     ),
@@ -202,7 +203,7 @@ class TopDoctorsList extends StatelessWidget {
         return GridView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: doctors.length,
+          itemCount: 4,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 10,

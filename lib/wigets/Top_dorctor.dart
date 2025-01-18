@@ -129,6 +129,7 @@ class TopDoctorCard extends StatelessWidget {
                     print('Get Appointment for $name');
                   },
                   style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 22, 108, 207),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(3),
                     ),

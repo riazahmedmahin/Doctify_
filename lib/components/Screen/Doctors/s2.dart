@@ -1,10 +1,13 @@
+import 'package:app/payment/payment.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class DoctorScheduleScreen extends StatefulWidget {
   final String slot;
 
-  const DoctorScheduleScreen({super.key, required this.slot});
+
+  const DoctorScheduleScreen({super.key, required this.slot, });
 
   @override
   _DoctorScheduleScreenState createState() => _DoctorScheduleScreenState();
@@ -193,14 +196,16 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: ElevatedButton(
+                  
                   style: ElevatedButton.styleFrom(
                     //elevation: 0, // Remove shadow to blend with gradient
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    //backgroundColor: Colors.transparent, // Transparent to show gradient
+                    backgroundColor: Color.fromARGB(255, 22, 108, 207), // Transparent to show gradient
                   ),
                   onPressed: () {
+                    //Get.to(() => Payment(fees: fees,));
                     // Handle booking logic
                   },
                   child: Row(

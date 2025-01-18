@@ -1,5 +1,6 @@
 import 'package:app/components/Screen/splash&onboardingScreen/splash_screen.dart';
 import 'package:app/firebase_options.dart';
+import 'package:app/payment/keys.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -7,6 +8,10 @@ import 'package:get/get.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Set Stripe publishable key
+  Stripe.publishableKey = publishableKey; // From keys.dart
+  await Stripe.instance.applySettings();  // Apply Stripe settings
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -23,21 +28,21 @@ class MedicalApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-              elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          backgroundColor: Color.fromARGB(255, 22, 108, 207),
-          foregroundColor: Colors.white,
-          textStyle: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            letterSpacing: 0.5,
-          ),
-        ),
-      ),
+      //         elevatedButtonTheme: ElevatedButtonThemeData(
+      //   style: ElevatedButton.styleFrom(
+      //     padding: const EdgeInsets.symmetric(vertical: 12),
+      //     shape: RoundedRectangleBorder(
+      //       borderRadius: BorderRadius.circular(8),
+      //     ),
+      //     backgroundColor: Color.fromARGB(255, 22, 108, 207),
+      //     foregroundColor: Colors.white,
+      //     textStyle: const TextStyle(
+      //       fontSize: 18,
+      //       fontWeight: FontWeight.w500,
+      //       letterSpacing: 0.5,
+      //     ),
+      //   ),
+      // ),
       ),
       home: const SplashScreen(),
     );

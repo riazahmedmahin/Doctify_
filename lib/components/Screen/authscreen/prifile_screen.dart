@@ -90,6 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 22, 108, 207),
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -97,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: const Text(
                   "Save",
-                  style: TextStyle(fontSize: 15,),
+                  style: TextStyle(fontSize: 15,color: Colors.white),
                 ),
               ),
             ),

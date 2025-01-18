@@ -2,6 +2,8 @@ import 'package:app/components/Screen/Doctors/s2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../payment/payment.dart';
+
 class DoctorDetailsPage extends StatelessWidget {
   final String name;
   final String specialty;
@@ -179,7 +181,8 @@ class DoctorDetailsPage extends StatelessWidget {
           ),
           child: ElevatedButton.icon(
             onPressed: () {
-              Get.to(() => DoctorScheduleScreen(slot: slot));
+              Get.to(() => Payment(fees: fees,));
+             //Get.to(() => DoctorScheduleScreen(slot: slot, fees: fees,));
             },
             icon: const Icon(
               Icons.calendar_today,

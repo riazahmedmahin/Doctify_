@@ -209,11 +209,12 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 22, 108, 207),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text('Book Now', style: TextStyle(fontSize: 12)),
+                    child: const Text('Book Now', style: TextStyle(fontSize: 12,color: Colors.white)),
                   ),
                 ),
               ],

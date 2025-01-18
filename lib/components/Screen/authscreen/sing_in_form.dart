@@ -117,9 +117,11 @@ class _SigninFormState extends State<SigninForm> {
                   child: ElevatedButton(
                     onPressed: _signIn,
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 22, 108, 207),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(22),
                       ),
+                      
                       padding: EdgeInsets.symmetric(horizontal: 65, vertical: 17),
                     ),
                     child: _isLoading
@@ -132,7 +134,7 @@ class _SigninFormState extends State<SigninForm> {
                     )
                         : Text(
                       'Sign In',
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 15,color: Colors.white),
                     ),
                   ),
                 ),

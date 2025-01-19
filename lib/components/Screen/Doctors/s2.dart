@@ -5,9 +5,9 @@ import 'package:intl/intl.dart';
 
 class DoctorScheduleScreen extends StatefulWidget {
   final String slot;
-
-
-  const DoctorScheduleScreen({super.key, required this.slot, });
+  //final String fees;
+  
+  const DoctorScheduleScreen({super.key, required this.slot,  });
 
   @override
   _DoctorScheduleScreenState createState() => _DoctorScheduleScreenState();
@@ -205,7 +205,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     backgroundColor: Color.fromARGB(255, 22, 108, 207), // Transparent to show gradient
                   ),
                   onPressed: () {
-                    //Get.to(() => Payment(fees: fees,));
+                    //Get.to(() => Payment(fees:fees ));
                     // Handle booking logic
                   },
                   child: Row(
@@ -223,6 +223,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          //Text(fees);
                           SizedBox(height: 5,),
                           Text(
                             "${_formatDate(_selectedDate)} ${_getMonthName(_selectedDate)} (${_getWeekday(_selectedDate)}) - $selectedSlot",

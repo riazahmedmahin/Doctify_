@@ -1,5 +1,9 @@
+import 'package:app/components/Screen/Doctors/details_screen.dart';
+import 'package:app/payment/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+// Import your details screen
 
 class DoctorListScreen extends StatefulWidget {
   @override
@@ -7,10 +11,9 @@ class DoctorListScreen extends StatefulWidget {
 }
 
 class _DoctorListScreenState extends State<DoctorListScreen> {
-  String selectedCategory = 'Neurologist'; // Set initial category to Cardio
+  String selectedCategory = 'Neurologist';
   List<Map<String, dynamic>> doctors = [];
 
-  // List of available categories
   final List<String> categories = [
     'Neurologist',
     'Cardiologist',
@@ -25,7 +28,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
   @override
   void initState() {
     super.initState();
-    fetchDoctors(); // Fetch doctors data when the screen initializes
+    fetchDoctors();
   }
 
   Future<void> fetchDoctors() async {
@@ -35,59 +38,60 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
         doctors = querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
       });
     } catch (e) {
-      // Handle errors
       print("Error fetching doctors: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Filter doctors based on selected category
     final filteredDoctors = doctors.where((doctor) => doctor['specialty'] == selectedCategory).toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE0EBFB), // Light background color
+      backgroundColor: const Color(0xFFE0EBFB),
       appBar: AppBar(
         title: const Text("Doctors"),
         backgroundColor: const Color.fromARGB(255, 224, 235, 251),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0, top: 12, bottom: 7, right: 10),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 15,
-            ),
-          ),
-        ),
       ),
       body: Column(
         children: [
-          // Category Chips
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
             child: Row(
               children: categories.map((category) => _buildCategoryChip(category)).toList(),
             ),
           ),
-          // Doctor List
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               itemCount: filteredDoctors.length,
               itemBuilder: (context, index) {
                 final doctor = filteredDoctors[index];
-                return _buildDoctorCard(
-                  name: doctor['name'] ?? 'N/A',
-                  qualification: doctor['qualification'] ?? 'N/A',
-                  specialty: doctor['specialty'] ?? 'N/A',
-                  imagePath: doctor['image'] ?? 'https://via.placeholder.com/150', // Default image
-                  rating: doctor['rating']?.toString() ?? 'N/A',
-                  fees: doctor['fees']?.toString() ?? 'N/A',
+                return GestureDetector(
+                  onTap: () {
+                    // Navigate to DoctorDetailsPage with the selected doctor details
+                    Get.to(() => DoctorDetailsPage(
+                          name: doctor['name'],
+                          specialty: doctor['specialty'],
+                          hospital: doctor['hospital'],
+                          rating: doctor['rating'].toString(),
+                          image: doctor['image'],
+                          description: doctor['description'],
+                          qualification: doctor['qualification'],
+                          experience: doctor['experience'].toString(),
+                          patient: doctor['patient'].toString(),
+                          fees: doctor['fees'].toString(),
+                          slot: doctor['slot'],
+                        ));
+                  },
+                  child: _buildDoctorCard(
+                    name: doctor['name'] ?? 'N/A',
+                    qualification: doctor['qualification'] ?? 'N/A',
+                    specialty: doctor['specialty'] ?? 'N/A',
+                    imagePath: doctor['image'] ?? 'https://via.placeholder.com/150',
+                    rating: doctor['rating']?.toString() ?? 'N/A',
+                    fees: doctor['fees']?.toString() ?? 'N/A',
+                  ),
                 );
               },
             ),
@@ -97,7 +101,6 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
     );
   }
 
-  // Helper method to build category chips
   Widget _buildCategoryChip(String category) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
@@ -111,14 +114,13 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
         selected: selectedCategory == category,
         onSelected: (bool selected) {
           setState(() {
-            selectedCategory = selected ? category : selectedCategory; // Update category
+            selectedCategory = selected ? category : selectedCategory;
           });
         },
       ),
     );
   }
 
-  // Helper method to build each doctor card
   Widget _buildDoctorCard({
     required String name,
     required String qualification,
@@ -129,23 +131,21 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
   }) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
-      elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipOval(
-                      child: Image.network(
-                        imagePath,
-                        width: 50, // Adjust the size
-                        height: 50, // Adjust the size
-                        fit: BoxFit.fill, // Ensures the image covers the circle area
-                      ),
-                    ),
+              child: Image.network(
+                imagePath,
+                width: 50,
+                height: 50,
+                fit: BoxFit.fill,
+              ),
+            ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -172,7 +172,6 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                       color: Colors.grey,
                     ),
                   ),
-                  const SizedBox(height: 4),
                   Row(
                     children: [
                       const Icon(Icons.star, color: Colors.orange, size: 18),
@@ -190,31 +189,27 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'Fees $fees',
+                  'Fees: $fees',
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.teal,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 40,
-                  width: 80,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Implement booking functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('$name has been booked!')),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 22, 108, 207),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () {
+                    Get.to(() => Payment(fees:fees ));
+                    print("Book now button clicked for $name");
+                    // You can add the booking functionality here
+                  },
+                  child: const Text('Book Now',style: TextStyle(color: Colors.white),),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Text('Book Now', style: TextStyle(fontSize: 12,color: Colors.white)),
                   ),
                 ),
               ],

@@ -182,7 +182,7 @@ class DoctorDetailsPage extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: () {
               Get.to(() => Payment(fees: fees,));
-             //Get.to(() => DoctorScheduleScreen(slot: slot, fees: fees,));
+             //Get.to(() => DoctorScheduleScreen(slot: slot,fees: fees, ));
             },
             icon: const Icon(
               Icons.calendar_today,

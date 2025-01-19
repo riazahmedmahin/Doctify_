@@ -232,7 +232,7 @@ class TopDoctorsList extends StatelessWidget {
 
 void _signOut() async {
   await FirebaseAuth.instance.signOut();
-  Get.offAll(() => const SignupForm()); 
+  Get.offAll(() => const SplashScreen()); 
 }
 
 

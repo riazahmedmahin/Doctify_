@@ -131,7 +131,7 @@ class _SignupFormState extends State<SignupForm> {
                       margin: EdgeInsets.only(right: 5),
                       child: ElevatedButton(
                         
-                        onPressed: _signIn,
+                        onPressed: _signup,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 22, 108, 207),
                           shape: RoundedRectangleBorder(
@@ -164,7 +164,7 @@ class _SignupFormState extends State<SignupForm> {
     );
   }
 
-void _signIn() async {
+void _signup() async {
   if (_formKey.currentState?.validate() == true) { // Validate the form
     setState(() {
       _isLoading = true;
@@ -174,7 +174,7 @@ void _signIn() async {
     String password = _PasswordController.text.trim();
 
     try {
-      User? user = await _auth.signInWithEmailAndPassword(email, password);
+      User? user = await _auth.signupWithEmailAndPassword(email, password);
       setState(() {
         _isLoading = false;
       });

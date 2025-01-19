@@ -1,11 +1,15 @@
 import 'package:app/CRUD/CURD.dart';
 import 'package:app/components/Screen/Doctors/schedule.dart';
+import 'package:app/components/Screen/authscreen/sign_Up_form.dart';
+import 'package:app/components/Screen/authscreen/sing_in_form.dart';
+import 'package:app/components/Screen/splash&onboardingScreen/splash_screen.dart';
 import 'package:app/payment/payment.dart';
 import 'package:app/wigets/Top_dorctor.dart';
 import 'package:app/wigets/UpcommingCard.dart';
 import 'package:app/wigets/category_itel.dart';
 import 'package:app/wigets/searchbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'authscreen/hello.dart';
@@ -113,6 +117,7 @@ class _HomePagesState extends State<HomePages> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
+
             Icons.menu_open,
             size: 20,
           ),
@@ -124,9 +129,7 @@ class _HomePagesState extends State<HomePages> {
           child: CircleAvatar(
             radius: 20,
             child: GestureDetector(
-              onTap: (){
-                //Get.to(() => Payment(fees: fee,));
-              },
+              onTap: _signOut,
               child: ClipOval(
                 child: Image.network(
                   "https://cdn-icons-png.flaticon.com/128/3135/3135715.png",
@@ -226,3 +229,10 @@ class TopDoctorsList extends StatelessWidget {
     );
   }
 }
+
+void _signOut() async {
+  await FirebaseAuth.instance.signOut();
+  Get.offAll(() => const SignupForm()); 
+}
+
+

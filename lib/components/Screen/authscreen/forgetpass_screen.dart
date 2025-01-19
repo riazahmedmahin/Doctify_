@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:get/get.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
@@ -8,14 +9,15 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController _emailController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance; // Firebase Auth instance
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding:
-              const EdgeInsets.only(left: 8.0, top: 8, bottom: 5, right: 8),
+          padding: const EdgeInsets.all(8.0),
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(),
@@ -30,16 +32,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
         ),
-        //backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 12),
         child: Column(
           children: [
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             ClipOval(
               child: Image.network(
                 "https://cdn-icons-png.flaticon.com/128/17969/17969464.png",
@@ -48,8 +47,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 width: 130,
               ),
             ),
-            SizedBox(height: 30),
-            Text(
+            const SizedBox(height: 30),
+            const Text(
               "Please Enter Your Email to Receive a Verification Code",
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -58,29 +57,84 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 color: Colors.black54,
               ),
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email/Phone',
+              decoration: const InputDecoration(
+                labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.emailAddress,
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             ElevatedButton(
-              onPressed: () {
-                // Implement sending functionality
-              },
-              child: Text('Send',style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15),),
-
+              onPressed: _isLoading ? null : _sendPasswordResetEmail,
+              child: _isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text(
+                      'Send',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 169, vertical: 15),
-              ),
+                  backgroundColor: const Color.fromARGB(255, 22, 108, 207),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 164, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(12), // Border radius set to 12
+                  )),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _sendPasswordResetEmail() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      Get.snackbar("Error", "Please enter your email",
+          snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      Get.snackbar(
+        "Success",
+        "Password reset email sent. Check your inbox.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar(
+        "Error",
+        e.message ?? "An error occurred",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "An unexpected error occurred.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

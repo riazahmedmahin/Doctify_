@@ -167,70 +167,75 @@ class DoctorDetailsPage extends StatelessWidget {
 
       // Fixed Button at the Bottom
       bottomNavigationBar: Positioned(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromARGB(255, 104, 179, 241),
-                Color.fromARGB(255, 41, 121, 255),
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-          ),
-          child: ElevatedButton.icon(
-            onPressed: () {
-              Get.to(() => Payment(fees: fees,));
-             //Get.to(() => DoctorScheduleScreen(slot: slot,fees: fees, ));
-            },
-            icon: const Icon(
-              Icons.calendar_today,
+  child: Container(
+    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color.fromARGB(255, 104, 179, 241),
+          Color.fromARGB(255, 41, 121, 255),
+        ],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+      ),
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(15),
+        topRight: Radius.circular(15),
+      ),
+    ),
+    child: ElevatedButton.icon(
+      onPressed: () {
+        Get.to(() => Payment(fees: fees));
+        // Get.to(() => DoctorScheduleScreen(slot: slot, fees: fees));
+      },
+      icon: const Icon(
+        Icons.calendar_today,
+        color: Colors.white,
+      ),
+      label: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Book Appointment',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
-            label: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Book Appointment',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      "Fees: ",
-                      style: TextStyle(
-                        fontSize: 17,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      fees,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shadowColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
           ),
+          Row(
+            children: [
+              const Text(
+                "Fees: ",
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                fees,
+                style: const TextStyle(
+                  fontSize: 17,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
+    ),
+  ),
+),
+
     );
   }
 

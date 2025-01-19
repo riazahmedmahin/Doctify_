@@ -1,3 +1,4 @@
+import 'package:app/components/Screen/authscreen/auth.dart';
 import 'package:app/components/Screen/splash&onboardingScreen/splash_screen.dart';
 import 'package:app/firebase_options.dart';
 import 'package:app/payment/keys.dart';
@@ -44,7 +45,7 @@ class MedicalApp extends StatelessWidget {
       //   ),
       // ),
       ),
-      home: const SplashScreen(),
+      home: const AuthHandler(),
     );
   }
 }

@@ -130,8 +130,10 @@ class _SignupFormState extends State<SignupForm> {
                     child: Container(
                       margin: EdgeInsets.only(right: 5),
                       child: ElevatedButton(
-                        onPressed: _signup,
+                        
+                        onPressed: _signIn,
                         style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 22, 108, 207),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(22),
                           ),
@@ -147,7 +149,7 @@ class _SignupFormState extends State<SignupForm> {
                         )
                             : Text(
                           'Sign Up', // Correct the label
-                          style: TextStyle(fontSize: 15),
+                          style: TextStyle(fontSize: 15,color: Colors.white),
                         ),
                       ),
                     ),
@@ -162,27 +164,33 @@ class _SignupFormState extends State<SignupForm> {
     );
   }
 
-  void _signup() async {
-    // Validate the form before proceeding
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+void _signIn() async {
+  if (_formKey.currentState?.validate() == true) { // Validate the form
+    setState(() {
+      _isLoading = true;
+    });
 
-      String phone = _PhoneController.text.trim();
-      String email = _EmailController.text.trim();
-      String password = _PasswordController.text.trim();
-      User? user = await _auth.signupWithEmailAndPassword(email, password);
+    String email = _EmailController.text.trim();
+    String password = _PasswordController.text.trim();
 
+    try {
+      User? user = await _auth.signInWithEmailAndPassword(email, password);
       setState(() {
         _isLoading = false;
       });
 
       if (user != null) {
-        Get.to(MainBottomNavScreen());
+        Get.offAll(() => MainBottomNavScreen()); // Navigate to main screen
       } else {
-        print("Something went wrong");
+        Get.snackbar("Error", "Sign in failed. Please check your credentials.");
       }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      Get.snackbar("Error", e.toString());
     }
   }
+}
+
 }

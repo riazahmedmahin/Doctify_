@@ -1,26 +1,103 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileScreen extends StatefulWidget {
+  final String userEmail;
+
+  const ProfileScreen({Key? key, required this.userEmail}) : super(key: key);
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // Initial data
-  String name = "Riaz Ahmed Mahin";
-  String email = "riaz@gmail.com";
-  String phoneNumber = "581-553-199";
-  String address = "Chittagong, Bangladesh";
-  String password = "Ak47.1000";
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // User Data Variables
+  String userId = '';
+  String name = '';
+  String email = '';
+  String phoneNumber = '';
+  String address = '';
+  String password = '';
+
+  @override
+  void initState() {
+    super.initState();
+    email = widget.userEmail; // Auto-fill signed-in email
+    fetchProfileData(); // Fetch profile data at initialization
+  }
+
+  // Fetch user profile data from Firebase
+  Future<void> fetchProfileData() async {
+    try {
+      // Check if the user document already exists
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('profiles')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // If user exists, fetch their data
+        final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
+        setState(() {
+          userId = data['userId'] ?? '';
+          name = data['name'] ?? '';
+          phoneNumber = data['phoneNumber'] ?? '';
+          address = data['address'] ?? '';
+          password = data['password'] ?? '';
+        });
+      } else {
+        // If user does not exist, generate a new user ID
+        userId = generateUniqueUserId(email);
+      }
+    } catch (e) {
+      print("Error fetching profile data: $e");
+    }
+  }
+
+  // Save or update user data in Firebase
+  Future<void> saveProfileData() async {
+    try {
+      await _firestore.collection('profiles').doc(userId).set({
+        'userId': userId,
+        'name': name,
+        'email': email,
+        'phoneNumber': phoneNumber,
+        'address': address,
+        'password': password,
+      });
+      fetchProfileData(); // Refresh UI with updated data
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Profile saved successfully!"),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error saving profile: $e"),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  // Generate a unique user ID based on email (only once)
+  String generateUniqueUserId(String email) {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    return '${email.split('@')[0]}_$timestamp';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFE0EBFB),
+      backgroundColor: const Color(0xFFE0EBFB),
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Profile"),
-        backgroundColor: Color(0xFFE0EBFB),
+        backgroundColor: const Color(0xFFE0EBFB),
         elevation: 0,
         foregroundColor: Colors.black,
       ),
@@ -33,14 +110,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             CircleAvatar(
               radius: 60,
               backgroundImage: NetworkImage(
-                  'https://avatars.githubusercontent.com/u/71597653?v=4'), // Add your image here
+                  'https://avatars.githubusercontent.com/u/71597653?v=4'),
             ),
             const SizedBox(height: 12),
-            const Text(
-              "Riaz Ahmed Mahin",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Text(
+              name.isEmpty ? 'Your Name' : name,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
+
+            // User ID field
+            buildNonEditableField(label: "User ID", value: userId),
 
             // Editable fields
             buildEditableField(
@@ -80,17 +160,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Show a SnackBar as a placeholder for save logic
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Details saved successfully!"),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                },
+                onPressed: saveProfileData,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 22, 108, 207),
+                  backgroundColor: const Color.fromARGB(255, 22, 108, 207),
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -98,7 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: const Text(
                   "Save",
-                  style: TextStyle(fontSize: 15,color: Colors.white),
+                  style: TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ),
             ),
@@ -142,5 +214,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-}
 
+  Widget buildNonEditableField({
+    required String label,
+    required String value,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          const SizedBox(height: 8),
+          TextFormField(
+            initialValue: value,
+            enabled: false,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              filled: true,
+              fillColor: const Color.fromARGB(255, 243, 246, 246),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

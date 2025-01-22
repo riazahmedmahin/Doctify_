@@ -1,6 +1,6 @@
 // lib/features/inbox/presentation/pages/inbox_page.dart
 
-import 'package:app/message/message.dart';
+import 'package:app/components/Screen/message/message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controller.dart';

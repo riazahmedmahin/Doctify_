@@ -1,13 +1,13 @@
-import 'package:app/payment/payment.dart';
+import 'package:app/components/Screen/payment/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class DoctorScheduleScreen extends StatefulWidget {
   final String slot;
-  //final String fees;
+  final String fees;
   
-  const DoctorScheduleScreen({super.key, required this.slot,  });
+  const DoctorScheduleScreen({super.key, required this.slot, required this.fees});
 
   @override
   _DoctorScheduleScreenState createState() => _DoctorScheduleScreenState();
@@ -84,6 +84,8 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                     onTap: () {
                       setState(() {
                         _selectedDate = day;
+                        // Optionally update the slot based on date or some other logic
+                        // selectedSlot = "Updated Slot"; // Update slot dynamically
                       });
                     },
                     child: Container(
@@ -187,26 +189,21 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [
-                 Color.fromARGB(255, 5, 93, 245),
-                            Color.fromARGB(255, 79, 167, 239),
+                      Color.fromARGB(255, 5, 93, 245),
+                      Color.fromARGB(255, 79, 167, 239),
                     ],
-                  // begin: Alignment.topLeft,
-                    //end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: ElevatedButton(
-                  
                   style: ElevatedButton.styleFrom(
-                    //elevation: 0, // Remove shadow to blend with gradient
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    backgroundColor: Color.fromARGB(255, 22, 108, 207), // Transparent to show gradient
+                    backgroundColor: Color.fromARGB(255, 22, 108, 207), 
                   ),
                   onPressed: () {
-                    //Get.to(() => Payment(fees:fees ));
-                    // Handle booking logic
+                    Get.to(() => Payment(fees: widget.fees)); // Pass the fees here
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -223,8 +220,7 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          //Text(fees);
-                          SizedBox(height: 5,),
+                          SizedBox(height: 5),
                           Text(
                             "${_formatDate(_selectedDate)} ${_getMonthName(_selectedDate)} (${_getWeekday(_selectedDate)}) - $selectedSlot",
                             style: const TextStyle(
@@ -235,7 +231,6 @@ class _DoctorScheduleScreenState extends State<DoctorScheduleScreen> {
                           ),
                         ],
                       ),
-
                       const SizedBox(width: 6),
                     ],
                   ),

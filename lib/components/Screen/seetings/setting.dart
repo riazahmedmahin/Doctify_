@@ -1,5 +1,7 @@
 import 'package:app/components/Screen/authscreen/prifile_screen.dart';
 import 'package:app/components/Screen/seetings/notification.dart';
+import 'package:app/components/Screen/splash&onboardingScreen/splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -35,7 +37,7 @@ class MoreScreen extends StatelessWidget {
                 width: 150,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.to(()=>ProfileScreen());
+                    Get.to(()=>ProfileScreen(userEmail: 'email',));
                     // Add edit profile action here
                   },
                   style: ElevatedButton.styleFrom(
@@ -71,6 +73,9 @@ class MoreScreen extends StatelessWidget {
                     _buildListItem(Icons.favorite_outline, 'Favourite Doctors'),
                     _buildListItem(Icons.description_outlined, 'Test Reports'),
                     _buildListItem(Icons.article_outlined, 'Terms & Conditions'),
+                    GestureDetector(
+                      onTap:  _signOut,
+                      child: _buildListItem(Icons.logout, 'Logout')),
                   ],
                 ),
               ),
@@ -111,3 +116,7 @@ class MoreScreen extends StatelessWidget {
 }
 
 
+void _signOut() async {
+  await FirebaseAuth.instance.signOut();
+  Get.offAll(() => const SplashScreen()); 
+}

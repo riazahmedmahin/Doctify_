@@ -4,7 +4,7 @@ import 'package:app/components/Screen/home_pages.dart';
 import 'package:app/components/Screen/seetings/setting.dart';
 import 'package:flutter/material.dart';
 
-import '../../message/inbox.dart';
+import 'message/inbox.dart';
 
 class MainBottomNavScreen extends StatefulWidget {
   @override

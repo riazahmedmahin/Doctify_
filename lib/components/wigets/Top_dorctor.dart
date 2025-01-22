@@ -1,3 +1,4 @@
+import 'package:app/components/Screen/Doctors/s2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -126,6 +127,7 @@ class TopDoctorCard extends StatelessWidget {
                 height: 20,
                 child: ElevatedButton(
                   onPressed: () {
+                    //Get.to(() => DoctorScheduleScreen(slot: slot, fees: fees));
                     print('Get Appointment for $name');
                   },
                   style: ElevatedButton.styleFrom(
@@ -148,4 +150,3 @@ class TopDoctorCard extends StatelessWidget {
     );
   }
 }
-

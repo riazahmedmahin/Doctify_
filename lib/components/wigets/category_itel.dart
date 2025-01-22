@@ -4,17 +4,17 @@ class CategoryItem extends StatelessWidget {
     Key? key,
     required this.image,
     required this.text,
+    required this.onTap,
   }) : super(key: key);
 
   final String image;
   final String text;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Add functionality for onTap if needed
-      },
+      onTap: onTap,
       child: Column(
         children: [
           Container(

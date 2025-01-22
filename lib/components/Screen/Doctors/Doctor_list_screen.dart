@@ -1,34 +1,40 @@
 import 'package:app/components/Screen/Doctors/details_screen.dart';
-import 'package:app/payment/payment.dart';
+import 'package:app/components/Screen/Doctors/s2.dart';
+import 'package:app/components/Screen/payment/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-// Import your details screen
 
 class DoctorListScreen extends StatefulWidget {
+  
   @override
   _DoctorListScreenState createState() => _DoctorListScreenState();
 }
 
 class _DoctorListScreenState extends State<DoctorListScreen> {
-  String selectedCategory = 'Neurologist';
+  String selectedCategory = '';
+  List<String> categories = [];
   List<Map<String, dynamic>> doctors = [];
-
-  final List<String> categories = [
-    'Neurologist',
-    'Cardiologist',
-    'Dentist',
-    'Hepatology',
-    'Family Physician',
-    'Internist',
-    'Pediatrician',
-    'Dermatologist',
-  ];
 
   @override
   void initState() {
     super.initState();
+    fetchCategories();
     fetchDoctors();
+  }
+
+  Future<void> fetchCategories() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance.collection('categories').get();
+      setState(() {
+        categories = querySnapshot.docs.map((doc) => doc['text'] as String).toList();
+        if (categories.isNotEmpty) {
+          selectedCategory = categories[0]; // Default to the first category
+        }
+      });
+    } catch (e) {
+      print("Error fetching categories: $e");
+    }
   }
 
   Future<void> fetchDoctors() async {
@@ -69,7 +75,6 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                 final doctor = filteredDoctors[index];
                 return GestureDetector(
                   onTap: () {
-                    // Navigate to DoctorDetailsPage with the selected doctor details
                     Get.to(() => DoctorDetailsPage(
                           name: doctor['name'],
                           specialty: doctor['specialty'],
@@ -135,7 +140,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(
           children: [
             ClipOval(
@@ -199,11 +204,9 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(() => Payment(fees:fees ));
-                    print("Book now button clicked for $name");
-                    // You can add the booking functionality here
+                    Get.to(() => Payment(fees: fees));
                   },
-                  child: const Text('Book Now',style: TextStyle(color: Colors.white),),
+                  child: const Text('Book Now', style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),

@@ -1,18 +1,17 @@
 import 'package:app/CRUD/CURD.dart';
+import 'package:app/components/Screen/Doctors/categorlist_screen.dart';
 import 'package:app/components/Screen/Doctors/schedule.dart';
 import 'package:app/components/Screen/authscreen/sign_Up_form.dart';
 import 'package:app/components/Screen/authscreen/sing_in_form.dart';
-import 'package:app/components/Screen/splash&onboardingScreen/splash_screen.dart';
-import 'package:app/payment/payment.dart';
-import 'package:app/wigets/Top_dorctor.dart';
-import 'package:app/wigets/UpcommingCard.dart';
-import 'package:app/wigets/category_itel.dart';
-import 'package:app/wigets/searchbar.dart';
+import 'package:app/components/wigets/Top_dorctor.dart';
+import 'package:app/components/wigets/UpcommingCard.dart';
+import 'package:app/components/wigets/category_itel.dart';
+import 'package:app/components/wigets/dl.dart';
+import 'package:app/components/wigets/searchbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'authscreen/hello.dart';
 
 class HomePages extends StatefulWidget {
   const HomePages({super.key});
@@ -47,11 +46,16 @@ class _HomePagesState extends State<HomePages> {
                     "Doctor specialist",
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    "see all",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromARGB(255, 22, 108, 207),
+                  GestureDetector(
+                    onTap: (){
+                      Get.to(()=>AllDoctorCategories());
+                    },
+                    child: Text(
+                      "see all",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 22, 108, 207),
+                      ),
                     ),
                   )
                 ],
@@ -129,7 +133,9 @@ class _HomePagesState extends State<HomePages> {
           child: CircleAvatar(
             radius: 20,
             child: GestureDetector(
-              onTap: _signOut,
+              onTap: (){
+                
+              },
               child: ClipOval(
                 child: Image.network(
                   "https://cdn-icons-png.flaticon.com/128/3135/3135715.png",
@@ -162,14 +168,21 @@ class CategoryItemList extends StatelessWidget {
           var categories = snapshot.data!.docs;
           return ListView.separated(
             scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            primary: false,
-            itemCount: categories.length,
+            itemCount: 6,
             itemBuilder: (context, index) {
               var category = categories[index];
               return CategoryItem(
                 image: category['image'],
                 text: category['text'],
+                onTap: () {
+            
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Screen(category: category['text']),
+                    ),
+                  );
+                },
               );
             },
             separatorBuilder: (_, __) {
@@ -181,7 +194,6 @@ class CategoryItemList extends StatelessWidget {
     );
   }
 }
-
 class TopDoctorsList extends StatelessWidget {
   final CollectionReference doctorsCollection = FirebaseFirestore.instance.collection('doctors');
 
@@ -230,9 +242,5 @@ class TopDoctorsList extends StatelessWidget {
   }
 }
 
-void _signOut() async {
-  await FirebaseAuth.instance.signOut();
-  Get.offAll(() => const SplashScreen()); 
-}
 
 

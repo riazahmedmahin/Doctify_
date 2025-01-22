@@ -1,7 +1,7 @@
 // Corrected the path to "widgets"
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../wigets/tostmessage.dart';
+import '../wigets/tostmessage.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;

@@ -1,6 +1,8 @@
 import 'package:app/components/Firebase/firebase_service.dart';
+import 'package:app/components/Screen/AuthScreen/userinfo_screen.dart';
 import 'package:app/components/Screen/MainBottomNavScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,13 +15,13 @@ class SignupForm extends StatefulWidget {
 
 class _SignupFormState extends State<SignupForm> {
   final FirebaseAuthService _auth = FirebaseAuthService();
-  final _formKey = GlobalKey<FormState>(); // Create a GlobalKey for form validation
+  final _formKey = GlobalKey<FormState>();
 
   TextEditingController _EmailController = TextEditingController();
   TextEditingController _PasswordController = TextEditingController();
   TextEditingController _PhoneController = TextEditingController();
 
-  bool _isLoading = false; // Loading state
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -46,29 +48,22 @@ class _SignupFormState extends State<SignupForm> {
             ),
             const SizedBox(height: 16),
             Form(
-              key: _formKey, // Assign the key to the Form
+              key: _formKey,
               child: Column(
                 children: [
                   TextFormField(
                     controller: _EmailController,
                     keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       hintText: "Email address",
-                      hintStyle: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.grey,
-                      ),
-                      suffixIcon: Icon(
-                        Icons.mail,
-                        color: Colors.grey.shade400,
-                      ),
+                      suffixIcon: Icon(Icons.mail, color: Colors.grey.shade400),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter an email address';
                       }
-                      if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
+                      if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                          .hasMatch(value)) {
                         return 'Please enter a valid email';
                       }
                       return null;
@@ -80,14 +75,7 @@ class _SignupFormState extends State<SignupForm> {
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: "Password",
-                      hintStyle: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.grey,
-                      ),
-                      suffixIcon: Icon(
-                        Icons.lock,
-                        color: Colors.grey.shade400,
-                      ),
+                      suffixIcon: Icon(Icons.lock, color: Colors.grey.shade400),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -105,14 +93,7 @@ class _SignupFormState extends State<SignupForm> {
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       hintText: "Phone number",
-                      hintStyle: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Colors.grey,
-                      ),
-                      suffixIcon: Icon(
-                        Icons.phone,
-                        color: Colors.grey.shade400,
-                      ),
+                      suffixIcon: Icon(Icons.phone, color: Colors.grey.shade400),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -124,54 +105,51 @@ class _SignupFormState extends State<SignupForm> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Container(
-                      margin: EdgeInsets.only(right: 5),
-                      child: ElevatedButton(
-                        
-                        onPressed: _signup,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 22, 108, 207),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 65, vertical: 17),
+                    child: ElevatedButton(
+                      onPressed: _signup,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 22, 108, 207),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(22),
                         ),
-                        child: _isLoading
-                            ? SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        )
-                            : Text(
-                          'Sign Up', // Correct the label
-                          style: TextStyle(fontSize: 15,color: Colors.white),
-                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 65, vertical: 17),
                       ),
+                      child: _isLoading
+                          ? SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              'Sign Up',
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.white),
+                            ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
           ],
         ),
       ),
     );
   }
-
 void _signup() async {
-  if (_formKey.currentState?.validate() == true) { // Validate the form
+  if (_formKey.currentState?.validate() == true) {
     setState(() {
       _isLoading = true;
     });
 
     String email = _EmailController.text.trim();
     String password = _PasswordController.text.trim();
+    String phone = _PhoneController.text.trim(); // Assuming you have a phone input field
 
     try {
       User? user = await _auth.signupWithEmailAndPassword(email, password);
@@ -180,9 +158,10 @@ void _signup() async {
       });
 
       if (user != null) {
-        Get.offAll(() => MainBottomNavScreen()); // Navigate to main screen
+        // Navigate to UserInfoScreen with email and phone
+        Get.offAll(() => UserInfoScreen(email: email, phone: phone));
       } else {
-        Get.snackbar("Error", "Sign in failed. Please check your credentials.");
+        Get.snackbar("Error", "Sign up failed. Please try again.");
       }
     } catch (e) {
       setState(() {

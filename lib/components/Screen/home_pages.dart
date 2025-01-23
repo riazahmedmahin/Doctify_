@@ -1,15 +1,10 @@
-import 'package:app/CRUD/CURD.dart';
 import 'package:app/components/Screen/Doctors/categorlist_screen.dart';
-import 'package:app/components/Screen/Doctors/schedule.dart';
-import 'package:app/components/Screen/authscreen/sign_Up_form.dart';
-import 'package:app/components/Screen/authscreen/sing_in_form.dart';
 import 'package:app/components/wigets/Top_dorctor.dart';
 import 'package:app/components/wigets/UpcommingCard.dart';
 import 'package:app/components/wigets/category_itel.dart';
-import 'package:app/components/wigets/dl.dart';
+import 'package:app/components/Screen/Doctors/Screen.dart';
 import 'package:app/components/wigets/searchbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

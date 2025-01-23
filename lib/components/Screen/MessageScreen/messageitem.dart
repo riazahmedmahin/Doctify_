@@ -1,6 +1,6 @@
 // lib/features/inbox/presentation/widgets/message_item.dart
 
-import 'package:app/components/Screen/message/avatarawidgets.dart';
+import 'package:app/components/Screen/MessageScreen/avatarawidgets.dart';
 import 'package:flutter/material.dart';
 
 import 'model.dart';

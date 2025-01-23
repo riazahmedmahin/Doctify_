@@ -1,8 +1,11 @@
 import 'dart:convert';
-import 'package:app/components/Screen/payment/keys.dart';
+import 'package:app/components/Screen/MainBottomNavScreen.dart';
+import 'package:app/components/Screen/home_pages.dart';
+import 'package:app/components/Screen/PaymentScreen/keys.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class Payment extends StatefulWidget {
@@ -24,23 +27,40 @@ class _PaymentState extends State<Payment> {
 
   Map<String, dynamic>? intantPaymentData;
 
-  showPaymentSheet() async {
-    try {
-      await Stripe.instance.presentPaymentSheet().then((val) {
-        intantPaymentData = null;
-      }).onError((error, stackTrace) {
-        if (kDebugMode) {
-          print("Debugging info: $stackTrace");
-        }
-        print("Error occurred: $error");
-      });
-    } on StripeException catch (error, stackTrace) {
+showPaymentSheet() async {
+  try {
+    await Stripe.instance.presentPaymentSheet().then((val) {
+      intantPaymentData = null;
+      Get.to(()=>MainBottomNavScreen());
+    }).onError((error, stackTrace) {
       if (kDebugMode) {
         print("Debugging info: $stackTrace");
       }
       print("Error occurred: $error");
+    });
+  } on StripeException catch (error, stackTrace) {
+    if (kDebugMode) {
+      print("Debugging info: $stackTrace");
     }
+    print("Error occurred: $error");
+
+    // Show alert dialog if an error occurs
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Payment Failed"),
+        content: Text("An error occurred during the payment process: $error"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Close"),
+          ),
+        ],
+      ),
+    );
   }
+}
+
 
   makeIntentForPayment(double amountToBeCharge, String currency) async {
     try {

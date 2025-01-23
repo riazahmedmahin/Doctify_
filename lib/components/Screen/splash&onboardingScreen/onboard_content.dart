@@ -1,8 +1,7 @@
 import 'package:app/components/Screen/MainBottomNavScreen.dart';
-import 'package:app/components/Screen/authscreen/forgetpass_screen.dart';
-import 'package:app/components/Screen/authscreen/sign_Up_form.dart';
-import 'package:app/components/Screen/authscreen/sing_in_form.dart';
-import 'package:app/components/Screen/splash&onboardingScreen/landed_content.dart';
+import 'package:app/components/Screen/AuthScreen/sign_Up_form.dart';
+import 'package:app/components/Screen/AuthScreen/sing_in_form.dart';
+import 'package:app/components/Screen/Splash&OnboardingScreen/landed_content.dart';
 import 'package:flutter/material.dart';
 
 class OnboardContent extends StatefulWidget {

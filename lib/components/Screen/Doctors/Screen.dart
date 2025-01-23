@@ -1,5 +1,5 @@
 import 'package:app/components/Screen/Doctors/details_screen.dart';
-import 'package:app/components/Screen/payment/payment.dart';
+import 'package:app/components/Screen/PaymentScreen/payment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

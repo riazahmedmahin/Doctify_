@@ -1,4 +1,4 @@
-import 'package:app/components/Screen/payment/payment.dart';
+import 'package:app/components/Screen/PaymentScreen/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

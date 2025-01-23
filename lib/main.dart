@@ -1,7 +1,6 @@
-import 'package:app/components/Screen/authscreen/auth.dart';
-import 'package:app/components/Screen/splash&onboardingScreen/splash_screen.dart';
+import 'package:app/components/Screen/AuthScreen/auth.dart';
 import 'package:app/firebase_options.dart';
-import 'package:app/components/Screen/payment/keys.dart';
+import 'package:app/components/Screen/PaymentScreen/keys.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';

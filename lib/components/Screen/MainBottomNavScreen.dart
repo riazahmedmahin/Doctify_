@@ -1,10 +1,10 @@
 import 'package:app/components/Screen/Doctor_profile.dart';
 import 'package:app/components/Screen/Doctors/Doctor_list_screen.dart';
 import 'package:app/components/Screen/home_pages.dart';
-import 'package:app/components/Screen/seetings/setting.dart';
+import 'package:app/components/Screen/SeetingsScreen/setting.dart';
 import 'package:flutter/material.dart';
 
-import 'message/inbox.dart';
+import 'MessageScreen/inbox.dart';
 
 class MainBottomNavScreen extends StatefulWidget {
   @override

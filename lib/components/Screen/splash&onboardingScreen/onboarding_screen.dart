@@ -1,4 +1,4 @@
-import 'package:app/components/Screen/splash&onboardingScreen/onboard_content.dart';
+import 'package:app/components/Screen/Splash&OnboardingScreen/onboard_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';

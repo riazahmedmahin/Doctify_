@@ -1,4 +1,4 @@
-import 'package:app/components/Screen/splash&onboardingScreen/onboarding_screen.dart';
+import 'package:app/components/Screen/Splash&OnboardingScreen/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

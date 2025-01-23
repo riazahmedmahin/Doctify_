@@ -1,6 +1,6 @@
-import 'package:app/components/Screen/authscreen/prifile_screen.dart';
-import 'package:app/components/Screen/seetings/notification.dart';
-import 'package:app/components/Screen/splash&onboardingScreen/splash_screen.dart';
+import 'package:app/components/Screen/AuthScreen/prifile_screen.dart';
+import 'package:app/components/Screen/SeetingsScreen/notification.dart';
+import 'package:app/components/Screen/Splash&OnboardingScreen/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

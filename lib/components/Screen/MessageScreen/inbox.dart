@@ -1,12 +1,8 @@
-// lib/features/inbox/presentation/pages/inbox_page.dart
 
-import 'package:app/components/Screen/message/message.dart';
+
+import 'package:app/components/Screen/MessageScreen/message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'controller.dart';
-import 'messageitem.dart';
-import 'model.dart';
-import 'package:flutter/material.dart';
 
 class ChatsScreen extends StatelessWidget {
   const ChatsScreen({super.key});

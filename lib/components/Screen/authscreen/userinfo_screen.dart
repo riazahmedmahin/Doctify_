@@ -133,7 +133,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 ),
                 const SizedBox(height: 24),
                 Align(
-                  alignment: Alignment.centerRight,
+                  alignment: Alignment.center,
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _saveUserInfo,
                     style: ElevatedButton.styleFrom(

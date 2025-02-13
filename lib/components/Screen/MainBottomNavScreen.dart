@@ -16,7 +16,7 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
 
   final List<Widget> _pages = [
     HomePages(),
-    DoctorProfileScreen(),
+    //DoctorProfileScreen(),
     DoctorListScreen(),
     ChatsScreen(),
     //InboxPage(),
@@ -78,19 +78,15 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
                       label: '',
                     ),
                     BottomNavigationBarItem(
-                      icon: _buildIconWithBackground(Icons.calendar_today, 1),
+                      icon: _buildIconWithBackground(Icons.person_sharp, 1),
                       label: '',
                     ),
                     BottomNavigationBarItem(
-                      icon: _buildIconWithBackground(Icons.person_sharp, 2),
+                      icon: _buildIconWithBackground(Icons.chat_bubble_outline, 2),
                       label: '',
                     ),
                     BottomNavigationBarItem(
-                      icon: _buildIconWithBackground(Icons.chat_bubble_outline, 3),
-                      label: '',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: _buildIconWithBackground(Icons.widgets_outlined, 4),
+                      icon: _buildIconWithBackground(Icons.widgets_outlined, 3),
                       label: '',
                     ),
                   ],

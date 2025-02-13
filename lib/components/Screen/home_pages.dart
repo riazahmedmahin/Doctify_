@@ -64,14 +64,7 @@ class _HomePagesState extends State<HomePages> {
                     "Upcomming",
                     style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    "see all",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      color: Color.fromARGB(255, 22, 108, 207),
-                    ),
-                  )
+
                 ],
               ),
 
@@ -133,8 +126,7 @@ class _HomePagesState extends State<HomePages> {
               },
               child: ClipOval(
                 child: Image.network(
-                  "https://cdn-icons-png.flaticon.com/128/3135/3135715.png",
-                  fit: BoxFit.cover,
+                  "https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D",                  fit: BoxFit.cover,
                   width: 60,
                   height: 60,
                 ),

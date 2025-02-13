@@ -11,7 +11,7 @@ class Upcommingcard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
-        padding:  EdgeInsets.all(12),
+        padding: EdgeInsets.all(12),
         width: double.infinity,
         height: 140,
         decoration: BoxDecoration(
@@ -30,11 +30,15 @@ class Upcommingcard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left:8),
-                    child: CircleAvatar(
-                      radius: 25,
-                      backgroundImage: NetworkImage('https://cdn-icons-png.flaticon.com/128/2785/2785482.png'),
-                      //backgroundColor: Colors.white,
+                    padding: const EdgeInsets.only(left: 8),
+                    child: ClipOval(
+                      child: Image.network(
+                        'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9jdG9yJTIwcHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
+                        width: 50, // Same as 2 * radius of CircleAvatar
+                        height: 50,
+                        fit: BoxFit
+                            .fill, // Ensures image covers the whole circle
+                      ),
                     ),
                   ),
                   Column(
@@ -55,9 +59,10 @@ class Upcommingcard extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right:10,bottom: 15),
+                    padding: const EdgeInsets.only(right: 10, bottom: 15),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(6),
@@ -80,9 +85,10 @@ class Upcommingcard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8,left: 80),
+              padding: const EdgeInsets.only(top: 8, left: 80),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(12),
@@ -92,17 +98,19 @@ class Upcommingcard extends StatelessWidget {
                   children: const [
                     Icon(Icons.calendar_month_outlined, color: Colors.white),
                     SizedBox(width: 8),
-                    Text('Today, 05:00 PM', style: TextStyle(color: Colors.white, fontSize: 16)),
+                    Text('Today, 05:00 PM',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
                     //SizedBox(height: 0,),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 15,)
+            SizedBox(
+              height: 15,
+            )
           ],
         ),
       ),
     );
   }
 }
-

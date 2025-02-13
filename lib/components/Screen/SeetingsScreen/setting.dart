@@ -37,7 +37,7 @@ class MoreScreen extends StatelessWidget {
                 width: 150,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.to(()=>ProfileScreen(userEmail: 'email',));
+                    Get.to(()=>ProfileScreen(email: 'email',));
                     // Add edit profile action here
                   },
                   style: ElevatedButton.styleFrom(

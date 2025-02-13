@@ -1,213 +1,216 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileScreen extends StatefulWidget {
-  final String userEmail;
+  final String email;
 
-  const ProfileScreen({Key? key, required this.userEmail}) : super(key: key);
+  const ProfileScreen({Key? key, required this.email}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  // User Data Variables
-  String userId = '';
-  String name = '';
-  String email = '';
-  String phoneNumber = '';
-  String address = '';
-  String password = '';
+  late TextEditingController _nameController;
+  late TextEditingController _phoneController;
+  late TextEditingController _addressController;
 
   @override
   void initState() {
     super.initState();
-    email = widget.userEmail; // Auto-fill signed-in email
-    fetchProfileData(); // Fetch profile data at initialization
+    _nameController = TextEditingController();
+    _phoneController = TextEditingController();
+    _addressController = TextEditingController();
   }
 
-  // Fetch user profile data from Firebase
-  Future<void> fetchProfileData() async {
-    try {
-      // Check if the user document already exists
-      QuerySnapshot querySnapshot = await _firestore
-          .collection('profiles')
-          .where('email', isEqualTo: email)
-          .get();
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    super.dispose();
+  }
 
-      if (querySnapshot.docs.isNotEmpty) {
-        // If user exists, fetch their data
-        final data = querySnapshot.docs.first.data() as Map<String, dynamic>;
-        setState(() {
-          userId = data['userId'] ?? '';
-          name = data['name'] ?? '';
-          phoneNumber = data['phoneNumber'] ?? '';
-          address = data['address'] ?? '';
-          password = data['password'] ?? '';
+  void _saveProfile() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        // Update user data in Firestore
+        await FirebaseFirestore.instance.collection('userinfo').doc(user.email).update({
+          'name': _nameController.text,
+          'phone': _phoneController.text,
+          'address': _addressController.text,
         });
-      } else {
-        // If user does not exist, generate a new user ID
-        userId = generateUniqueUserId(email);
+
+        // Show success message and update UI
+        Get.snackbar('Success', 'Profile updated successfully',
+            backgroundColor: Colors.green, colorText: Colors.white);
+
+        setState(() {}); // Trigger UI update to reflect changes
+      } catch (e) {
+        Get.snackbar('Error', 'Failed to update profile: $e',
+            backgroundColor: Colors.red, colorText: Colors.white);
       }
-    } catch (e) {
-      print("Error fetching profile data: $e");
     }
-  }
-
-  // Save or update user data in Firebase
-  Future<void> saveProfileData() async {
-    try {
-      await _firestore.collection('profiles').doc(userId).set({
-        'userId': userId,
-        'name': name,
-        'email': email,
-        'phoneNumber': phoneNumber,
-        'address': address,
-        'password': password,
-      });
-      fetchProfileData(); // Refresh UI with updated data
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Profile saved successfully!"),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error saving profile: $e"),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
-  }
-
-  // Generate a unique user ID based on email (only once)
-  String generateUniqueUserId(String email) {
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    return '${email.split('@')[0]}_$timestamp';
   }
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return Scaffold(
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Get.toNamed('/login'); // Navigate to login screen
+            },
+            child: const Text('Please Log In'),
+            style: ElevatedButton.styleFrom(
+              //primary: Colors.blue,
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              textStyle: const TextStyle(fontSize: 18),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
-      backgroundColor: const Color(0xFFE0EBFB),
+      backgroundColor: const Color.fromARGB(255, 224, 235, 251),
       appBar: AppBar(
+        title: const Text('Profile'),
         centerTitle: true,
-        title: const Text("Profile"),
-        backgroundColor: const Color(0xFFE0EBFB),
-        elevation: 0,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.blue,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Profile picture and name
-            CircleAvatar(
-              radius: 60,
-              backgroundImage: NetworkImage(
-                  'https://avatars.githubusercontent.com/u/71597653?v=4'),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              name.isEmpty ? 'Your Name' : name,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
+      body: FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance
+            .collection('userinfo')
+            .doc(user.email)
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            // User ID field
-            buildNonEditableField(label: "User ID", value: userId),
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
 
-            // Editable fields
-            buildEditableField(
-              label: "Your name",
-              value: name,
-              icon: Icons.person,
-              onChanged: (newValue) => setState(() => name = newValue),
-            ),
-            buildEditableField(
-              label: "Your email address",
-              value: email,
-              icon: Icons.email,
-              onChanged: (newValue) => setState(() => email = newValue),
-            ),
-            buildEditableField(
-              label: "Your phone number",
-              value: phoneNumber,
-              icon: Icons.phone,
-              onChanged: (newValue) => setState(() => phoneNumber = newValue),
-            ),
-            buildEditableField(
-              label: "Your address",
-              value: address,
-              icon: Icons.location_on,
-              onChanged: (newValue) => setState(() => address = newValue),
-            ),
-            buildEditableField(
-              label: "Password",
-              value: password,
-              icon: Icons.visibility,
-              isPassword: true,
-              onChanged: (newValue) => setState(() => password = newValue),
-            ),
-            const SizedBox(height: 24),
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return const Center(child: Text('No user data found.'));
+          }
 
-            // Save button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: saveProfileData,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 22, 108, 207),
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  "Save",
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                ),
-              ),
+          var userData = snapshot.data!.data() as Map<String, dynamic>;
+
+          // Pre-fill the text controllers with existing user data
+          _nameController.text = userData['name'] ?? '';
+          _phoneController.text = userData['phone'] ?? '';
+          _addressController.text = userData['address'] ?? '';
+
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView(
+              children: [
+                _buildProfileImage(userData['imageUrl']),
+                const SizedBox(height: 20),
+                _buildProfileItem('Email', userData['email'] ?? 'No email'),
+                const SizedBox(height: 24),
+                _buildProfileField('Name', _nameController),
+                _buildProfileField('Phone', _phoneController),
+                _buildProfileField('Address', _addressController),
+                const SizedBox(height: 30),
+                _buildSaveButton(),
+                const SizedBox(height: 16),
+                //_buildBackButton(),
+              ],
             ),
-          ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProfileImage(String? imageUrl) {
+    return Center(
+      child: Container(
+        width: 120,
+        height: 120,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(60),
+          border: Border.all(color: Colors.white, width: 5),
+        ),
+        child: ClipOval(
+          child: imageUrl != null && imageUrl.isNotEmpty
+              ? Image.network(imageUrl, fit: BoxFit.cover)
+              : const Icon(Icons.person, size: 60, color: Colors.blue),
         ),
       ),
     );
   }
 
-  Widget buildEditableField({
-    required String label,
-    required String value,
-    required IconData icon,
-    required ValueChanged<String> onChanged,
-    bool isPassword = false,
-  }) {
+  Widget _buildProfileItem(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.blue,
+            ),
           ),
-          const SizedBox(height: 8),
-          TextFormField(
-            initialValue: value,
-            obscureText: isPassword,
-            onChanged: onChanged,
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black87,
+            ),
+          ),
+          const Divider(color: Colors.grey, thickness: 0.5),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileField(String label, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.blue,
+            ),
+          ),
+          const SizedBox(height: 6),
+          TextField(
+            controller: controller,
             decoration: InputDecoration(
-              prefixIcon: Icon(icon),
+              hintText: 'Enter your $label',
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              filled: true,
+              fillColor: Colors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
               ),
-              filled: true,
-              fillColor: const Color.fromARGB(255, 243, 246, 246),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Colors.blue),
+              ),
             ),
           ),
         ],
@@ -215,33 +218,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget buildNonEditableField({
-    required String label,
-    required String value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
-          ),
-          const SizedBox(height: 8),
-          TextFormField(
-            initialValue: value,
-            enabled: false,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              filled: true,
-              fillColor: const Color.fromARGB(255, 243, 246, 246),
-            ),
-          ),
-        ],
+  Widget _buildSaveButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: _saveProfile,
+        style: ElevatedButton.styleFrom(
+           
+          padding: const EdgeInsets.symmetric(horizontal: 120, vertical: 20),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          textStyle: const TextStyle(fontSize: 18),
+        ),
+        child: const Text('Save Changes'),
       ),
     );
   }
+
+
 }
